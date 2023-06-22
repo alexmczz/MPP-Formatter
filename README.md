@@ -57,4 +57,4 @@ For any inquiries or assistance regarding this software, please contact:
 
 Developer: Alex McPadden
 Email: <alex.mcpadden@gmail.com>
-[Additional Contact Information]
+
