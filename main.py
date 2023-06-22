@@ -22,36 +22,49 @@ import datetime
 import csv
 
 
-#used to format the file name which is going to be the month day year followed by .csv
+# Used to format the file name which is going to be the month day year followed by .csv
 current_date = datetime.date.today()
 formatted_date = current_date.strftime("%m%d%Y")
 
 
-#creates a tkinter window(drop box)
+# Creates a tkinter window (drop box)
 def handle_drop(event):
-    file_path = filedialog.askopenfilename() #used to get the file path 
+    file_path = filedialog.askopenfilename()  # Used to get the file path
     if file_path:
         file_name = file_path.split("/")[-1]  # Extract the file name from the path
         # Process the dropped file or use the file name as desired
         print("Dropped file:", file_name)
-        # ^^used for debugging to ensure correct file was selected^^
-        
-        #reading selected file
-        with open(file_path, 'r') as mpp_fees:
-            reader = csv.DictReader(mpp_fees) #reads whatever file that is going to be processed/formatted
-            fieldnames = reader.fieldnames or [] #for the new formated file
-            
-            
-            #writing to new file
-            with open(f'{formatted_date}.csv', 'w', newline='') as mpp_fees_formatted:
-                writer = csv.DictWriter(mpp_fees_formatted, fieldnames=fieldnames)
-                writer.writeheader()  # Write the header row
-                writer.writerows(reader)  # Write the remaining rows
+        # Used for debugging to ensure the correct file was selected
+
+        # Read the input text file
+        with open(file_path, 'r') as text_file:
+            lines = text_file.readlines()
+
+        # Remove leading/trailing whitespace and split the lines into columns
+        rows = [line.strip().split('\t') for line in lines]
+
+        # Remove the original header row
+        header_row = rows.pop(0)
+
+        # Sort rows based on the 'FeeTransaction' column as strings
+        sorted_rows = sorted(rows, key=lambda x: x[0])
+
+        # Insert the new header row
+        new_header_row = ["FeeTransactionName", "Description", "StudentID", "Full", "Reduced", "Free", "DueDate",
+                          "IssueDate", "AccountCode", "ExternalFeeID", "FundingAccountName", "NewFeesNotification",
+                          "Rate Plan Name"]
+        sorted_rows.insert(0, new_header_row)
+
+        # Writing to the new file
+        with open(f'{formatted_date}.csv', 'w', newline='') as mpp_fees_formatted:
+            writer = csv.writer(mpp_fees_formatted)
+            writer.writerows(sorted_rows)
+
 
 window = tk.Tk()
 
 # Create a label to act as the dropbox
-drop_label = tk.Label(window, text="Drop File Here", font=("Arial", 14), padx=20, pady=10)
+drop_label = tk.Label(window, text="Drop File Here", font=("Arial", 14), padx=50, pady=70)
 drop_label.pack()
 
 # Bind the left mouse button click event to the label
