@@ -13,7 +13,7 @@
 #
 # By using this software, you acknowledge and agree to the above terms and conditions. If you do not agree to these terms, you should refrain from using this software.
 #
-# For further inquiries or assistance, please contact the developer at alex.mcpadden@gmail.com
+
 
 
 import tkinter as tk
